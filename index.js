@@ -125,11 +125,11 @@ function writeToFile(fileName, response) {
     } else {
         fs.appendFileSync(fileName, markdown.subHeader("Questions?"));
         fs.appendFileSync(fileName, markdown.profileLink(response));
-        fs.appendFileSync(fileName, `Reach out at: ${response.email}`);
+        fs.appendFileSync(fileName, `Get in touch at ${response.email} for any additional questions`);
     }
 }
 
-// Function initializes the program and begins prompts
+// Function initializes the inquirer program and begins prompts
 function init() {
     inquirer
         .prompt([
@@ -229,7 +229,6 @@ function init() {
                 choices: ['Yes', 'No']
             },
         ]).then((response) => {
-            // console.log(JSON.stringify(response))
             writeToFile('TEST.md', response, (err) =>
                 err ? console.error(err) : console.log('Your Markdown File Was Successfully Created'))
         })
