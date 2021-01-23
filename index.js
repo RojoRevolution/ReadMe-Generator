@@ -13,17 +13,17 @@ const questions = [
     'Choose a License:',
     'Enter Your GitHub Username:',
     'Enter Your Email Address:'
-
 ];
 
 // function to write README file
 function writeToFile(fileName, response) {
     // fs.appendFile(fileName, JSON.stringify(response.title), (err) =>
     //     err ? console.error(err) : console.log('Success'));
-    const headers = markdown(response);
+    const headers = markdown.header(response);
     fs.appendFileSync(fileName, headers, (err) =>
         err ? console.error(err) : console.log('Project Title Was added'));
 
+    fs.appendFileSync(fileName, markdown.subHeader("Description"));
     fs.appendFileSync(fileName, response.description, (err) =>
         err ? console.error(err) : console.log('Description Body Text Was added'));
 
