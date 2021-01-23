@@ -115,7 +115,7 @@ function writeToFile(fileName, response) {
         console.log("No license notes were submitted")
     } else {
         fs.appendFileSync(fileName, markdown.subHeader("License"));
-        fs.appendFileSync(fileName, response.license);
+        fs.appendFileSync(fileName, `This project is covered under the license: ${response.license}`);
     }
 
     // =============================== //
@@ -125,7 +125,7 @@ function writeToFile(fileName, response) {
     } else {
         fs.appendFileSync(fileName, markdown.subHeader("Questions?"));
         fs.appendFileSync(fileName, markdown.profileLink(response));
-        fs.appendFileSync(fileName, response.email);
+        fs.appendFileSync(fileName, `Reach out at: ${response.email}`);
     }
 }
 
