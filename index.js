@@ -15,6 +15,7 @@ const questions = [
     'Choose a license (Required):',
     'Enter Your GitHub profile URL:',
     'Enter Your email address:',
+    'Would you like to include a table of contents?',
 ];
 
 // function to write README file
@@ -24,37 +25,47 @@ function writeToFile(fileName, response) {
     fs.appendFileSync(fileName, markdown.header(response));
     // =============================== //
     // License Badge - Required
-    // switch (response.license) {
-    //     case 'Apache 2.0':
-    //         fs.appendFileSync(fileName, markdown.licenseApache);
-    //         break;
-    //     case 'GNU GPLv3':
-    //         fs.appendFileSync(fileName, markdown.licenseGNU);
-    //         break;
-    //     case 'MIT':
-    //         fs.appendFileSync(fileName, markdown.licenseMIT);
-    //         break;
-    //     case 'ISC':
-    //         fs.appendFileSync(fileName, markdown.licenseISC);
-    //         break;
-    // }
-    try {
-        if (response.license === "Apache 2.0") {
-            fs.appendFileSync(fileName, markdown.licenseApache);
-        } else if (response.license === "GNU GPLv3") {
-            fs.appendFileSync(fileName, markdown.licenseGNU);
-        } else if (response.license === "MIT") {
-            fs.appendFileSync(fileName, markdown.licenseMIT);
-        } else if (response.license === "ISC") {
-            fs.appendFileSync(fileName, markdown.licenseISC);
-        }
-    } catch (error) {
-        console.error(error);
+    switch (response.license) {
+        case 'Apache 2.0':
+            fs.appendFileSync(fileName, '![License Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-success)\n');
+            break;
+        case 'GNU GPLv3':
+            fs.appendFileSync(fileName, '![License GNU GPLv3](https://img.shields.io/badge/License-GNU%20GPLv3-Success)\n');
+            break;
+        case 'MIT':
+            fs.appendFileSync(fileName, '![License MIT](https://img.shields.io/badge/License-MIT-Success)\n');
+            break;
+        case 'ISC':
+            fs.appendFileSync(fileName, '![License ISC](https://img.shields.io/badge/License-ISC-Success)\n');
+            break;
     }
     // =============================== //
     // Append Description - Required
     fs.appendFileSync(fileName, markdown.subHeader("Description"));
     fs.appendFileSync(fileName, response.description);
+    // =============================== //
+    // Table of Contents - Optional
+    if (response.tableOfContents === 'Yes') {
+        fs.appendFileSync(fileName, markdown.subHeader("Table of Contents"));
+        if (response.installation) {
+            fs.appendFileSync(fileName, '* [Installation](#Installation)\n');
+        }
+        if (response.usage) {
+            fs.appendFileSync(fileName, '* [Usage](#Usage)\n');
+        }
+        if (response.contribution) {
+            fs.appendFileSync(fileName, '* [Contribution](#Contribution)\n');
+        }
+        if (response.test) {
+            fs.appendFileSync(fileName, '* [Testing](#Testing)\n');
+        }
+        if (response.license) {
+            fs.appendFileSync(fileName, '* [License](#License)\n');
+        }
+        if (response.githubProfileURL) {
+            fs.appendFileSync(fileName, '* [Contact Info](#Questions?)\n');
+        }
+    }
     // =============================== //
     // Installation Section - Optional
     if (!response.installation) {
@@ -75,7 +86,7 @@ function writeToFile(fileName, response) {
     }
     // =============================== //
     // Contribution Section - Optional
-    if (!response.usage) {
+    if (!response.contribution) {
         console.log("No usage notes were submitted")
     } else {
         fs.appendFileSync(fileName, markdown.subHeader("Contribution"));
@@ -83,26 +94,26 @@ function writeToFile(fileName, response) {
     }
     // =============================== //
     // Test Section - Optional
-    if (!response.usage) {
+    if (!response.test) {
         console.log("No test notes were submitted")
     } else {
-        fs.appendFileSync(fileName, markdown.subHeader("Test Instructions"));
+        fs.appendFileSync(fileName, markdown.subHeader("Testing"));
         fs.appendFileSync(fileName, response.test);
     }
     // =============================== //
     // License Section - Optional
-    if (!response.usage) {
-        console.log("No test notes were submitted")
+    if (!response.license) {
+        console.log("No license notes were submitted")
     } else {
         fs.appendFileSync(fileName, markdown.subHeader("License"));
         fs.appendFileSync(fileName, response.license);
     }
     // =============================== //
     // Questions Section - Required
-    if (!response.usage) {
-        console.log("No test notes were submitted")
+    if (!response.githubProfileURL && !response.email) {
+        console.log("No GitHub or Email notes were submitted")
     } else {
-        fs.appendFileSync(fileName, markdown.subHeader("Questions"));
+        fs.appendFileSync(fileName, markdown.subHeader("Questions?"));
         fs.appendFileSync(fileName, markdown.profileLink(response));
         fs.appendFileSync(fileName, response.email);
     }
@@ -200,6 +211,12 @@ function init() {
                     }
 
                 }
+            },
+            {
+                type: 'list',
+                message: questions[11],
+                name: 'tableOfContents',
+                choices: ['Yes', 'No']
             },
         ]).then((response) => {
             // console.log(JSON.stringify(response))
