@@ -4,16 +4,17 @@ const markdown = require('./utils/generateMarkdown');
 
 // array of questions for user
 const questions = [
-    'Enter a Project Title:',
-    'Enter a Project Description:',
-    'Enter Installation Instructions:',
+    'Enter a project title:',
+    'Enter a project description:',
+    'Enter installation instructions:',
     'Type an installation code example (Leave blank if not applicable):',
-    'Enter Usage Information:',
-    'Enter Contribution Guidelines:',
-    'Enter Test Instructions:',
-    'Choose a License:',
-    'Enter Your GitHub Username:',
-    'Enter Your Email Address:',
+    'Enter usage instructions:',
+    'Enter usage code example (Leave blank if not applicable):',
+    'Enter contribution guidelines:',
+    'Enter test instructions:',
+    'Choose a license:',
+    'Enter Your GitHub username:',
+    'Enter Your email address:',
 ];
 
 // function to write README file
@@ -41,6 +42,23 @@ function writeToFile(fileName, response) {
     } else {
         fs.appendFileSync(fileName, markdown.subHeader("Usage"));
         fs.appendFileSync(fileName, response.usage);
+        fs.appendFileSync(fileName, markdown.usageCode(response));
+    }
+    // =============================== //
+    // Contribution Section - Optional
+    if (!response.usage) {
+        console.log("No usage notes were submitted")
+    } else {
+        fs.appendFileSync(fileName, markdown.subHeader("Contribution"));
+        fs.appendFileSync(fileName, response.contribution);
+    }
+    // =============================== //
+    // Test Section - Optional
+    if (!response.usage) {
+        console.log("No test notes were submitted")
+    } else {
+        fs.appendFileSync(fileName, markdown.subHeader("Test Instructions"));
+        fs.appendFileSync(fileName, response.test);
     }
 }
 
@@ -90,30 +108,35 @@ function init() {
                 message: questions[4],
                 name: 'usage'
             },
-            // {
-            //     type: 'input',
-            //     message: questions[5],
-            //     name: 'contribution',
-            // },
-            // {
-            //     type: 'input',
-            //     message: questions[6],
-            //     name: 'test',
-            // },
+            {
+                type: 'input',
+                message: questions[5],
+                name: 'usageCode'
+            },
+            {
+                type: 'input',
+                message: questions[6],
+                name: 'contribution',
+            },
+            {
+                type: 'input',
+                message: questions[7],
+                name: 'test',
+            },
             // {
             //     type: 'list',
-            //     message: questions[7],
+            //     message: questions[8],
             //     name: 'license',
             //     choices: ['Apache 2.0', 'GNU GPLv3', 'MIT', 'ISC']
             // },
             // {
             //     type: 'input',
-            //     message: questions[8],
+            //     message: questions[9],
             //     name: 'github-username',
             // },
             // {
             //     type: 'input',
-            //     message: questions[9],
+            //     message: questions[10],
             //     name: 'email',
             // },
         ]).then((response) => {
