@@ -20,9 +20,11 @@ const questions = [
 
 // function to write README file
 function writeToFile(fileName, response) {
+
     // =============================== //
     // Append name of project - Required
     fs.appendFileSync(fileName, markdown.header(response));
+
     // =============================== //
     // License Badge - Required
     switch (response.license) {
@@ -39,10 +41,12 @@ function writeToFile(fileName, response) {
             fs.appendFileSync(fileName, '![License ISC](https://img.shields.io/badge/License-ISC-Success)\n');
             break;
     }
+
     // =============================== //
     // Append Description - Required
     fs.appendFileSync(fileName, markdown.subHeader("Description"));
     fs.appendFileSync(fileName, response.description);
+
     // =============================== //
     // Table of Contents - Optional
     if (response.tableOfContents === 'Yes') {
@@ -66,6 +70,7 @@ function writeToFile(fileName, response) {
             fs.appendFileSync(fileName, '* [Contact Info](#Questions?)\n');
         }
     }
+
     // =============================== //
     // Installation Section - Optional
     if (!response.installation) {
@@ -75,6 +80,7 @@ function writeToFile(fileName, response) {
         fs.appendFileSync(fileName, response.installation);
         fs.appendFileSync(fileName, markdown.installCode(response));
     }
+
     // =============================== //
     // Usage Section - Optional
     if (!response.usage) {
@@ -84,6 +90,7 @@ function writeToFile(fileName, response) {
         fs.appendFileSync(fileName, response.usage);
         fs.appendFileSync(fileName, markdown.usageCode(response));
     }
+
     // =============================== //
     // Contribution Section - Optional
     if (!response.contribution) {
@@ -92,6 +99,7 @@ function writeToFile(fileName, response) {
         fs.appendFileSync(fileName, markdown.subHeader("Contribution"));
         fs.appendFileSync(fileName, response.contribution);
     }
+
     // =============================== //
     // Test Section - Optional
     if (!response.test) {
@@ -100,6 +108,7 @@ function writeToFile(fileName, response) {
         fs.appendFileSync(fileName, markdown.subHeader("Testing"));
         fs.appendFileSync(fileName, response.test);
     }
+
     // =============================== //
     // License Section - Optional
     if (!response.license) {
@@ -108,6 +117,7 @@ function writeToFile(fileName, response) {
         fs.appendFileSync(fileName, markdown.subHeader("License"));
         fs.appendFileSync(fileName, response.license);
     }
+
     // =============================== //
     // Questions Section - Required
     if (!response.githubProfileURL && !response.email) {
