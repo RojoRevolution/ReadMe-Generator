@@ -4,16 +4,16 @@ const markdown = require('./utils/generateMarkdown');
 
 // array of questions for user
 const questions = [
-    'Enter a project title:',
-    'Enter a project description:',
+    'Enter a project title (Required):',
+    'Enter a project description (Required):',
     'Enter installation instructions:',
     'Type an installation code example (Leave blank if not applicable):',
     'Enter usage instructions:',
     'Enter usage code example (Leave blank if not applicable):',
     'Enter contribution guidelines:',
     'Enter test instructions:',
-    'Choose a license:',
-    'Enter Your GitHub username:',
+    'Choose a license (Required):',
+    'Enter Your GitHub profile URL:',
     'Enter Your email address:',
 ];
 
@@ -22,6 +22,35 @@ function writeToFile(fileName, response) {
     // =============================== //
     // Append name of project - Required
     fs.appendFileSync(fileName, markdown.header(response));
+    // =============================== //
+    // License Badge - Required
+    // switch (response.license) {
+    //     case 'Apache 2.0':
+    //         fs.appendFileSync(fileName, markdown.licenseApache);
+    //         break;
+    //     case 'GNU GPLv3':
+    //         fs.appendFileSync(fileName, markdown.licenseGNU);
+    //         break;
+    //     case 'MIT':
+    //         fs.appendFileSync(fileName, markdown.licenseMIT);
+    //         break;
+    //     case 'ISC':
+    //         fs.appendFileSync(fileName, markdown.licenseISC);
+    //         break;
+    // }
+    try {
+        if (response.license === "Apache 2.0") {
+            fs.appendFileSync(fileName, markdown.licenseApache);
+        } else if (response.license === "GNU GPLv3") {
+            fs.appendFileSync(fileName, markdown.licenseGNU);
+        } else if (response.license === "MIT") {
+            fs.appendFileSync(fileName, markdown.licenseMIT);
+        } else if (response.license === "ISC") {
+            fs.appendFileSync(fileName, markdown.licenseISC);
+        }
+    } catch (error) {
+        console.error(error);
+    }
     // =============================== //
     // Append Description - Required
     fs.appendFileSync(fileName, markdown.subHeader("Description"));
@@ -60,9 +89,26 @@ function writeToFile(fileName, response) {
         fs.appendFileSync(fileName, markdown.subHeader("Test Instructions"));
         fs.appendFileSync(fileName, response.test);
     }
+    // =============================== //
+    // License Section - Optional
+    if (!response.usage) {
+        console.log("No test notes were submitted")
+    } else {
+        fs.appendFileSync(fileName, markdown.subHeader("License"));
+        fs.appendFileSync(fileName, response.license);
+    }
+    // =============================== //
+    // Questions Section - Required
+    if (!response.usage) {
+        console.log("No test notes were submitted")
+    } else {
+        fs.appendFileSync(fileName, markdown.subHeader("Questions"));
+        fs.appendFileSync(fileName, markdown.profileLink(response));
+        fs.appendFileSync(fileName, response.email);
+    }
 }
 
-// function to initialize program
+// Function initializes the program and begins prompts
 function init() {
     inquirer
         .prompt([
@@ -123,22 +169,38 @@ function init() {
                 message: questions[7],
                 name: 'test',
             },
-            // {
-            //     type: 'list',
-            //     message: questions[8],
-            //     name: 'license',
-            //     choices: ['Apache 2.0', 'GNU GPLv3', 'MIT', 'ISC']
-            // },
-            // {
-            //     type: 'input',
-            //     message: questions[9],
-            //     name: 'github-username',
-            // },
-            // {
-            //     type: 'input',
-            //     message: questions[10],
-            //     name: 'email',
-            // },
+            {
+                type: 'list',
+                message: questions[8],
+                name: 'license',
+                choices: ['Apache 2.0', 'GNU GPLv3', 'MIT', 'ISC']
+            },
+            {
+                type: 'input',
+                message: questions[9],
+                name: 'githubProfileURL',
+                validate: function (answer) {
+                    if (answer === "") {
+                        return console.log("A valid gitHub url is required.")
+                    } else {
+                        return true;
+                    }
+
+                }
+            },
+            {
+                type: 'input',
+                message: questions[10],
+                name: 'email',
+                validate: function (answer) {
+                    if (answer === "") {
+                        return console.log("A contact email address is required.")
+                    } else {
+                        return true;
+                    }
+
+                }
+            },
         ]).then((response) => {
             // console.log(JSON.stringify(response))
             writeToFile('TEST.md', response, (err) =>
