@@ -3,7 +3,7 @@
 //   return `# ${response.title}\n\n`;
 // }
 function generateHeader(response) {
-  return `# ${response.title}\n\n`;
+  return `# ${response.title} \n`;
 }
 
 function generateSubHeader(response) {
@@ -13,5 +13,6 @@ function generateSubHeader(response) {
 // module.exports = header;
 module.exports = {
   header: (response) => `# ${response.title}\n\n`,
-  subHeader: (response) => `## ${response}\n`
+  subHeader: (response) => `\n ##  ${response}\n`,
+  installCode: (response) => `\n > ${response.installationCode} \n`,
 }
