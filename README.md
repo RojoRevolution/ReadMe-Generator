@@ -1,4 +1,4 @@
-# README Generator - Node.js
+# :rocket: README Generator - Node.js
 
 ![License MIT](https://img.shields.io/badge/License-MIT-Success)
 
