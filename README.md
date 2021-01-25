@@ -2,6 +2,8 @@
 
 ![License MIT](https://img.shields.io/badge/License-MIT-Success)
 
+![Product Example](./images/terminal.png)
+
 ##  Description
 This project utilizes Javascript and Node.js to help you create a README.md file through a series of prompts within the command line.
 ##  Table of Contents
