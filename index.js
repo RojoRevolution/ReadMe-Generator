@@ -229,7 +229,7 @@ function init() {
                 choices: ['Yes', 'No']
             },
         ]).then((response) => {
-            writeToFile('TEST.md', response, (err) =>
+            writeToFile('README.md', response, (err) =>
                 err ? console.error(err) : console.log('Your Markdown File Was Successfully Created'))
         })
 }
